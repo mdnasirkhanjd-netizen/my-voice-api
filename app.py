@@ -21,16 +21,15 @@ async def generate_audio(request: Request):
     data = await request.json()
     script_text = data.get("text", "")
     
-    # HuggingFace E2-F5-TTS-এর সঠিক প্যারামিটার ফরম্যাট
+    # api_name এবং কি-ওয়ার্ড আর্গুমেন্ট ছাড়া সরাসরি পজিশনাল কল
     result = hf_client.predict(
-        ref_audio_orig=handle_file(REF_AUDIO),
-        ref_text_input=REF_TEXT,
-        gen_text_input=script_text,
-        remove_silence=True,
-        cross_fade_duration=0.15,
-        nfe_step=32,
-        speed=1.0,
-        api_name="/infer"
+        handle_file(REF_AUDIO),  # 1. ref_audio
+        REF_TEXT,                # 2. ref_text
+        script_text,             # 3. gen_text
+        True,                    # 4. remove_silence
+        0.15,                    # 5. cross_fade_duration
+        32,                      # 6. nfe_step
+        1.0                      # 7. speed
     )
     return FileResponse(result[0], media_type="audio/wav", filename="output.wav")
 
