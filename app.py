@@ -27,7 +27,8 @@ async def generate_audio(request: Request):
         True,
         0.15,
         32,
-        1.0
+        1.0,
+        api_name="/predict"
     )
     return FileResponse(result[0], media_type="audio/wav", filename="output.wav")
 
