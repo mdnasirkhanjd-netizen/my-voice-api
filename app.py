@@ -30,7 +30,10 @@ async def generate_audio(request: Request):
         1.0,
         api_name="/predict"
     )
-    return FileResponse(result[0], media_type="audio/wav", filename="output.wav")
+    
+    # জেনারেট হওয়া ফাইল স্ট্রাকচার হ্যান্ডেল করা
+    output_path = result[0] if isinstance(result, (list, tuple)) else result
+    return FileResponse(output_path, media_type="audio/wav", filename="output.wav")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=10000)
