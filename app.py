@@ -5,6 +5,8 @@ from fastapi.responses import FileResponse
 from gradio_client import Client, handle_file
 
 app = FastAPI()
+
+# HuggingFace Client Connection
 hf_client = Client("mrfakename/E2-F5-TTS")
 
 REF_AUDIO = "my_voice.mp3"
@@ -19,6 +21,7 @@ async def generate_audio(request: Request):
     data = await request.json()
     script_text = data.get("text", "")
     
+    # api_name বাদ দেওয়া হয়েছে যাতে Gradio স্বয়ংক্রিয়ভাবে ডিফল্ট ফাংশন ধরে নেয়
     result = hf_client.predict(
         ref_audio_input=handle_file(REF_AUDIO),
         ref_text_input=REF_TEXT,
@@ -26,8 +29,7 @@ async def generate_audio(request: Request):
         remove_silence=True,
         cross_fade_duration=0.15,
         nfe_step=32,
-        speed=1.0,
-        api_name="/basic_tts"
+        speed=1.0
     )
     return FileResponse(result[0], media_type="audio/wav", filename="output.wav")
 
