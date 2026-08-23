@@ -21,15 +21,16 @@ async def generate_audio(request: Request):
     data = await request.json()
     script_text = data.get("text", "")
     
-    # api_name বাদ দেওয়া হয়েছে যাতে Gradio স্বয়ংক্রিয়ভাবে ডিফল্ট ফাংশন ধরে নেয়
+    # নতুন এবং সঠিক প্যারামিটার নেম অনুযায়ী সাজানো কোড
     result = hf_client.predict(
-        ref_audio_input=handle_file(REF_AUDIO),
+        ref_audio_orig=handle_file(REF_AUDIO),
         ref_text_input=REF_TEXT,
         gen_text_input=script_text,
         remove_silence=True,
         cross_fade_duration=0.15,
         nfe_step=32,
-        speed=1.0
+        speed=1.0,
+        api_name="/infer"
     )
     return FileResponse(result[0], media_type="audio/wav", filename="output.wav")
 
