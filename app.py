@@ -21,16 +21,16 @@ async def generate_audio(request: Request):
     data = await request.json()
     script_text = data.get("text", "")
     
-    # নতুন এবং সঠিক প্যারামিটার নেম অনুযায়ী সাজানো কোড
+    # fn_index=0 দিয়ে সরাসরি প্রথম এপিআই ফাংশনটি কল করা হচ্ছে
     result = hf_client.predict(
-        ref_audio_orig=handle_file(REF_AUDIO),
-        ref_text_input=REF_TEXT,
-        gen_text_input=script_text,
-        remove_silence=True,
-        cross_fade_duration=0.15,
-        nfe_step=32,
-        speed=1.0,
-        api_name="/infer"
+        handle_file(REF_AUDIO),
+        REF_TEXT,
+        script_text,
+        True,   # remove_silence
+        0.15,   # cross_fade_duration
+        32,     # nfe_step
+        1.0,    # speed
+        fn_index=0
     )
     return FileResponse(result[0], media_type="audio/wav", filename="output.wav")
 
