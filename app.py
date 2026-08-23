@@ -31,7 +31,6 @@ async def generate_audio(request: Request):
         api_name="/predict"
     )
     
-    # জেনারেট হওয়া ফাইল স্ট্রাকচার হ্যান্ডেল করা
     output_path = result[0] if isinstance(result, (list, tuple)) else result
     return FileResponse(output_path, media_type="audio/wav", filename="output.wav")
 
